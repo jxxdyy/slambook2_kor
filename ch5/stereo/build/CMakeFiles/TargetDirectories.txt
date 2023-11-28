@@ -1,0 +1,3 @@
+/home/pjy/slam_study/slambook2/ch5/stereo/build/CMakeFiles/rebuild_cache.dir
+/home/pjy/slam_study/slambook2/ch5/stereo/build/CMakeFiles/edit_cache.dir
+/home/pjy/slam_study/slambook2/ch5/stereo/build/CMakeFiles/stereoVision.dir
