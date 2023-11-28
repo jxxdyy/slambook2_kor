@@ -1,3 +1,0 @@
-/home/pjy/slam_study/slambook2/ch3/useEigen/build/CMakeFiles/rebuild_cache.dir
-/home/pjy/slam_study/slambook2/ch3/useEigen/build/CMakeFiles/edit_cache.dir
-/home/pjy/slam_study/slambook2/ch3/useEigen/build/CMakeFiles/eigenMatrix.dir
