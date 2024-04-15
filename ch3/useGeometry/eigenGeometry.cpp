@@ -45,7 +45,8 @@ int main(int argc, char **argv) {
   Eigen::Vector3d v_transformed = T * v;                              // R*v+t와 동일
   cout << "v tranformed = " << v_transformed.transpose() << endl;
 
-  //* affine 변환 및 projection 변환에는 Eigen::Affine3d 和 Eigen::Projective3d를 사용
+
+  //* affine 변환 및 projection 변환에는 Eigen::Affine3d 및 Eigen::Projective3d를 사용
 
   //* Quaternion
   // Quaternion에 AngleAxis를 직접 할당할 수 있으며 그 반대도 가능

@@ -9,6 +9,8 @@ using namespace Eigen;
 
 int main(int argc, char** argv) {
   Quaterniond q1(0.35, 0.2, 0.3, 0.1), q2(-0.5, 0.4, -0.1, 0.2);
+
+  // quaternion을 사용하기 전에 normalization
   q1.normalize();
   q2.normalize();
   Vector3d t1(0.3, 0.1, 0.1), t2(-0.1, 0.5, 0.3);
@@ -18,6 +20,7 @@ int main(int argc, char** argv) {
   T1w.pretranslate(t1);
   T2w.pretranslate(t2);
 
+  // p1을 p2 좌표계로 변환
   Vector3d p2 = T2w * T1w.inverse() * p1;
   cout << endl << p2.transpose() << endl;
   return 0;

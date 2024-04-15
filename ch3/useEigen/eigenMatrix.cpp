@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
      cout << "times 10: \n" << 10 * matrix_33 << endl;           // 곱셈
      cout << "inverse: \n" << matrix_33.inverse() << endl;       // 역행렬
      cout << "det: " << matrix_33.determinant() << endl;         // 행렬식
-
+     
      // 고유값
      // 실제 대칭 행렬은 성공적인 대학화를 보장
      Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> eigen_solver(matrix_33.transpose() * matrix_33);
@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
 
      Eigen::Matrix<double, MATRIX_SIZE, MATRIX_SIZE> matrix_NN
           = Eigen::MatrixXd::Random(MATRIX_SIZE, MATRIX_SIZE);
-     matrix_NN = matrix_NN * matrix_NN.transpose();  // 保证半正定
+     matrix_NN = matrix_NN * matrix_NN.transpose();
      Eigen::Matrix<double, MATRIX_SIZE, 1> v_Nd = Eigen::MatrixXd::Random(MATRIX_SIZE, 1);
 
      clock_t time_stt = clock();
