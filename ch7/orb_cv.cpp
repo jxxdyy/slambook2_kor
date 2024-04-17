@@ -12,24 +12,24 @@ int main(int argc, char **argv) {
     cout << "usage: feature_extraction img1 img2" << endl;
     return 1;
   }
-  //-- 读取图像
-  Mat img_1 = imread(argv[1], CV_LOAD_IMAGE_COLOR);
-  Mat img_2 = imread(argv[2], CV_LOAD_IMAGE_COLOR);
+  //-- read image
+  Mat img_1 = imread(argv[1], cv::IMREAD_COLOR);
+  Mat img_2 = imread(argv[2], cv::IMREAD_COLOR);
   assert(img_1.data != nullptr && img_2.data != nullptr);
 
-  //-- 初始化
+  //-- 변수 initialization
   std::vector<KeyPoint> keypoints_1, keypoints_2;
   Mat descriptors_1, descriptors_2;
   Ptr<FeatureDetector> detector = ORB::create();
   Ptr<DescriptorExtractor> descriptor = ORB::create();
   Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce-Hamming");
 
-  //-- 第一步:检测 Oriented FAST 角点位置
+  //-- Step 1 : Oriented FAST feature point detection
   chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
   detector->detect(img_1, keypoints_1);
   detector->detect(img_2, keypoints_2);
 
-  //-- 第二步:根据角点位置计算 BRIEF 描述子
+  //-- Step2 : feature point에 대해 BRIEF descriptor 계산
   descriptor->compute(img_1, keypoints_1, descriptors_1);
   descriptor->compute(img_2, keypoints_2, descriptors_2);
   chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
   drawKeypoints(img_1, keypoints_1, outimg1, Scalar::all(-1), DrawMatchesFlags::DEFAULT);
   imshow("ORB features", outimg1);
 
-  //-- 第三步:对两幅图像中的BRIEF描述子进行匹配，使用 Hamming 距离
+  //-- Step 3 : Hamming distance를 이용해서 BRIEF descriptor matching 수행
   vector<DMatch> matches;
   t1 = chrono::steady_clock::now();
   matcher->match(descriptors_1, descriptors_2, matches);
@@ -48,8 +48,8 @@ int main(int argc, char **argv) {
   time_used = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
   cout << "match ORB cost = " << time_used.count() << " seconds. " << endl;
 
-  //-- 第四步:匹配点对筛选
-  // 计算最小距离和最大距离
+  //-- Step 4 : matching pair filtering
+  // min distance와 max distance 계산
   auto min_max = minmax_element(matches.begin(), matches.end(),
                                 [](const DMatch &m1, const DMatch &m2) { return m1.distance < m2.distance; });
   double min_dist = min_max.first->distance;
@@ -58,7 +58,8 @@ int main(int argc, char **argv) {
   printf("-- Max dist : %f \n", max_dist);
   printf("-- Min dist : %f \n", min_dist);
 
-  //当描述子之间的距离大于两倍的最小距离时,即认为匹配有误.但有时候最小距离会非常小,设置一个经验值30作为下限.
+  // descriptor 간의 distance가 최소 거리의 두 배 이상이면 불일치로 간주
+  // min distance를 30으로 threshold 설정
   std::vector<DMatch> good_matches;
   for (int i = 0; i < descriptors_1.rows; i++) {
     if (matches[i].distance <= max(2 * min_dist, 30.0)) {
@@ -66,7 +67,7 @@ int main(int argc, char **argv) {
     }
   }
 
-  //-- 第五步:绘制匹配结果
+  //-- Step 5 : Matching 결과 visualization
   Mat img_match;
   Mat img_goodmatch;
   drawMatches(img_1, keypoints_1, img_2, keypoints_2, matches, img_match);

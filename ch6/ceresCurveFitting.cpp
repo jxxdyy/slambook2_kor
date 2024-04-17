@@ -55,19 +55,19 @@ int main(int argc, char **argv) {
     );
   }
 
-  // 配置求解器
-  ceres::Solver::Options options;     // 这里有很多配置项可以填
-  options.linear_solver_type = ceres::DENSE_NORMAL_CHOLESKY;  // 增量方程如何求解
-  options.minimizer_progress_to_stdout = true;   // 输出到cout
+  // ceres::Solver 설정 부분
+  ceres::Solver::Options options;     // 다양한 옵션 설정 가능
+  options.linear_solver_type = ceres::DENSE_NORMAL_CHOLESKY;  // 증분 방정식을 어떻게 풀어야 할지?
+  options.minimizer_progress_to_stdout = true;   // cout으로 출력
 
-  ceres::Solver::Summary summary;                // 优化信息
+  ceres::Solver::Summary summary;                 // optimization
   chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
-  ceres::Solve(options, &problem, &summary);  // 开始优化
+  ceres::Solve(options, &problem, &summary);      // optimization 시작
   chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
   chrono::duration<double> time_used = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
   cout << "solve time cost = " << time_used.count() << " seconds. " << endl;
 
-  // 输出结果
+  // results
   cout << summary.BriefReport() << endl;
   cout << "estimated a,b,c = ";
   for (auto a:abc) cout << a << " ";
